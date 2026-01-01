@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../data/artwork_metadata.json';
+import { getImage } from '../utils/images';
 
 // Get a selection of featured works from different categories
 const featuredPaintings = data.paintings.slice(0, 2);
@@ -20,19 +22,35 @@ const featuredWorks = [
   </section>
 
   <div class="gallery-grid">
-    {featuredWorks.map((artwork) => (
-      <a href={`/work/${artwork.category}/${artwork.id}`} class="gallery-item">
-        <img 
-          src={`/images/${artwork.file.replace('fullart/', '')}`} 
-          alt={artwork.title}
-          loading="lazy"
-        />
-        <div class="gallery-item-info">
-          <div class="gallery-item-title">{artwork.title}</div>
-          <div class="gallery-item-meta">{artwork.year}</div>
-        </div>
-      </a>
-    ))}
+    {featuredWorks.map((artwork) => {
+      const imagePath = artwork.file.replace('fullart/', '');
+      const imageData = getImage(imagePath);
+      return (
+        <a href={`/work/${artwork.category}/${artwork.id}`} class="gallery-item">
+          {imageData ? (
+            <Image 
+              src={imageData}
+              alt={artwork.title}
+              width={400}
+              height={400}
+              loading="lazy"
+              format="webp"
+              quality={80}
+            />
+          ) : (
+            <img 
+              src={`/images/${imagePath}`} 
+              alt={artwork.title}
+              loading="lazy"
+            />
+          )}
+          <div class="gallery-item-info">
+            <div class="gallery-item-title">{artwork.title}</div>
+            <div class="gallery-item-meta">{artwork.year}</div>
+          </div>
+        </a>
+      );
+    })}
   </div>
 
   <section class="section-header" style="padding-bottom: 4rem;">

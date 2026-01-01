@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import { getImage } from '../utils/images';
+
 interface Artwork {
   id: string;
   title: string;
@@ -18,17 +21,33 @@ const { artworks, category, basePath = '/work' } = Astro.props;
 ---
 
 <div class="gallery-grid">
-  {artworks.map((artwork) => (
-    <a href={`${basePath}/${category}/${artwork.id}`} class="gallery-item">
-      <img 
-        src={`/images/${artwork.file.replace('fullart/', '')}`} 
-        alt={artwork.title}
-        loading="lazy"
-      />
-      <div class="gallery-item-info">
-        <div class="gallery-item-title">{artwork.title}</div>
-        <div class="gallery-item-meta">{artwork.year} &middot; {artwork.medium}</div>
-      </div>
-    </a>
-  ))}
+  {artworks.map((artwork) => {
+    const imagePath = artwork.file.replace('fullart/', '');
+    const imageData = getImage(imagePath);
+    return (
+      <a href={`${basePath}/${category}/${artwork.id}`} class="gallery-item">
+        {imageData ? (
+          <Image 
+            src={imageData}
+            alt={artwork.title}
+            width={400}
+            height={400}
+            loading="lazy"
+            format="webp"
+            quality={80}
+          />
+        ) : (
+          <img 
+            src={`/images/${imagePath}`} 
+            alt={artwork.title}
+            loading="lazy"
+          />
+        )}
+        <div class="gallery-item-info">
+          <div class="gallery-item-title">{artwork.title}</div>
+          <div class="gallery-item-meta">{artwork.year} &middot; {artwork.medium}</div>
+        </div>
+      </a>
+    );
+  })}
 </div>
