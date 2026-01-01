@@ -2,13 +2,6 @@
   command = "npm run build"
   publish = "dist"
 
-# Redirects for SPA-style navigation (if needed)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  conditions = {Role = ["admin"]}
-
 # Headers for caching
 [[headers]]
   for = "/images/*"
