@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import GalleryGrid from '../../../components/GalleryGrid.astro';
+import data from '../../../data/artwork_metadata.json';
+---
+
+<BaseLayout title="Photos" description="Digital photography by Diana Santiago.">
+  <section class="section-header">
+    <h1>Photos</h1>
+  </section>
+
+  <nav class="category-nav">
+    <a href="/work">All</a>
+    <a href="/work/paintings">Paintings</a>
+    <a href="/work/drawings">Drawings</a>
+    <a href="/work/photos" class="active">Photos</a>
+  </nav>
+
+  <GalleryGrid artworks={data.photos} category="photos" />
+</BaseLayout>

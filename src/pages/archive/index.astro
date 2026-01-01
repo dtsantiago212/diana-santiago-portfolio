@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import data from '../../data/artwork_metadata.json';
+---
+
+<BaseLayout title="Archive" description="Earlier works by Diana Santiago.">
+  <section class="section-header">
+    <h1>Archive</h1>
+    <p>Earlier works, 2003-2004</p>
+  </section>
+
+  <GalleryGrid artworks={data.archive} category="archive" basePath="/archive" />
+</BaseLayout>

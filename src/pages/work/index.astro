@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import data from '../../data/artwork_metadata.json';
+
+// Combine all new work
+const allWork = [
+  ...data.paintings.map(w => ({ ...w, category: 'paintings' })),
+  ...data.drawings.map(w => ({ ...w, category: 'drawings' })),
+  ...data.photos.map(w => ({ ...w, category: 'photos' })),
+];
+---
+
+<BaseLayout title="New Work" description="Browse Diana Santiago's new work - paintings, drawings, and photography.">
+  <section class="section-header">
+    <h1>New Work</h1>
+  </section>
+
+  <nav class="category-nav">
+    <a href="/work" class="active">All</a>
+    <a href="/work/paintings">Paintings</a>
+    <a href="/work/drawings">Drawings</a>
+    <a href="/work/photos">Photos</a>
+  </nav>
+
+  <div class="gallery-grid">
+    {allWork.map((artwork) => (
+      <a href={`/work/${artwork.category}/${artwork.id}`} class="gallery-item">
+        <img 
+          src={`/images/${artwork.file.replace('fullart/', '')}`} 
+          alt={artwork.title}
+          loading="lazy"
+        />
+        <div class="gallery-item-info">
+          <div class="gallery-item-title">{artwork.title}</div>
+          <div class="gallery-item-meta">{artwork.year} &middot; {artwork.medium}</div>
+        </div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

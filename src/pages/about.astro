@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import data from '../data/artwork_metadata.json';
+
+const { artist } = data;
+---
+
+<BaseLayout title="About" description={`About ${artist.name} - Fine Artist based in New York.`}>
+  <div class="about-content">
+    <div class="about-text">
+      <h1>About</h1>
+      <p>{artist.statement}</p>
+      
+      <div class="about-contact">
+        <h3>Contact</h3>
+        <a href="/contact">Get in touch &rarr;</a>
+      </div>
+    </div>
+    <div class="about-image">
+      <!-- Placeholder for artist photo if available -->
+    </div>
+  </div>
+</BaseLayout>

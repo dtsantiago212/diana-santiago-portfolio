@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import data from '../data/artwork_metadata.json';
+
+// Get a selection of featured works from different categories
+const featuredPaintings = data.paintings.slice(0, 2);
+const featuredDrawings = data.drawings.slice(0, 2);
+const featuredPhotos = data.photos.slice(0, 2);
+
+const featuredWorks = [
+  ...featuredPaintings.map(w => ({ ...w, category: 'paintings' })),
+  ...featuredDrawings.map(w => ({ ...w, category: 'drawings' })),
+  ...featuredPhotos.map(w => ({ ...w, category: 'photos' })),
+];
+---
+
+<BaseLayout title="Home" description="Diana Santiago - Fine Artist. Mixed media artwork exploring cultural translation, femininity, and the modern woman.">
+  <section class="hero">
+    <h1>Fine Artist.<br/>Mixed Media.</h1>
+  </section>
+
+  <div class="gallery-grid">
+    {featuredWorks.map((artwork) => (
+      <a href={`/work/${artwork.category}/${artwork.id}`} class="gallery-item">
+        <img 
+          src={`/images/${artwork.file.replace('fullart/', '')}`} 
+          alt={artwork.title}
+          loading="lazy"
+        />
+        <div class="gallery-item-info">
+          <div class="gallery-item-title">{artwork.title}</div>
+          <div class="gallery-item-meta">{artwork.year}</div>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <section class="section-header" style="padding-bottom: 4rem;">
+    <p><a href="/work" style="text-decoration: underline;">View all work &rarr;</a></p>
+  </section>
+</BaseLayout>
