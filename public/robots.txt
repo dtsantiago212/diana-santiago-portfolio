@@ -1,0 +1,6 @@
+# robots.txt for dianasantiago.com
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://dianasantiago.com/sitemap-index.xml

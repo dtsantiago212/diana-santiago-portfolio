@@ -4,10 +4,48 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
 }
 
-const { title, description = "Diana Santiago - Fine Artist" } = Astro.props;
+const { 
+  title, 
+  description = "Diana Santiago - Fine Artist specializing in mixed media artwork exploring cultural translation, femininity, and the modern woman.",
+  image = "/og-image.jpg",
+  type = "website",
+  noindex = false
+} = Astro.props;
+
 const currentPath = Astro.url.pathname;
+const siteUrl = Astro.site?.href?.replace(/\/$/, '') || 'https://dianasantiago.com';
+const canonicalUrl = `${siteUrl}${currentPath}`;
+const ogImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+const fullTitle = title === 'Home' ? 'Diana Santiago | Fine Artist' : `${title} | Diana Santiago`;
+
+// Structured data for the artist
+const artistSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Diana Santiago",
+  "jobTitle": "Fine Artist",
+  "description": "Mixed media artist exploring cultural translation, femininity, and the modern woman. Based in New York.",
+  "url": siteUrl,
+  "sameAs": [],
+  "knowsAbout": ["Painting", "Drawing", "Photography", "Mixed Media Art", "Installation Art"]
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Diana Santiago Portfolio",
+  "url": siteUrl,
+  "description": description,
+  "author": {
+    "@type": "Person",
+    "name": "Diana Santiago"
+  }
+};
 ---
 
 <!DOCTYPE html>
@@ -15,9 +53,52 @@ const currentPath = Astro.url.pathname;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
     <meta name="description" content={description} />
+    <meta name="author" content="Diana Santiago" />
+    <meta name="keywords" content="Diana Santiago, fine artist, mixed media, paintings, drawings, photography, New York artist, contemporary art, feminist art" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+    
+    <!-- Robots -->
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <meta name="robots" content="index, follow" />
+    )}
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Diana Santiago" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Diana Santiago</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/og-image.jpg" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1a1a1a" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(artistSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
   </head>
   <body>
     <header class="header">
